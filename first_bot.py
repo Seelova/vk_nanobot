@@ -1,17 +1,19 @@
 import vk_api
+import random
 from config import *
 
-vkUser = vk_api.VkApi(token = USER_TOKEN)
+vkBot = vk_api.VkApi(token = BOT_TOKEN)
 
-USER_ID = 1
-result = vkUser.method('users.get',{'user_ids': '1, 445'})
+def write_msg(user_id, text):
+    vkBot.method('messages.send',
+                 {'user_id': user_id,
+                  'message': text,
+                  'random_id': random.randint(0,2147483648)})
 
-def user_1():
-    print(str(result[0]['first_name'])+ ' ' + str(result[0]['last_name']))
+lp_server = vkBot.method('messages.getLongPollServer',
+                         {'lp_version': 3,
+                          'need_pts': 0})
+print(lp_server)
 
-user_1()
-
-def user_2():
-    print(str(result[1]['first_name'])+ ' '+ str(result[1]['last_name']))
-
-user_2()
+ts,key,server = lp_server['ts'],lp_server['key'],lp_server['server']
+write_msg(155695570, 'Hello')
